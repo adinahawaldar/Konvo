@@ -1,0 +1,105 @@
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background-color: #1e1e2f;
+  color: white;
+}
+
+header button {
+  margin-right: 15px;
+  background: none;
+  border: none;
+  color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+}
+
+.messages {
+  flex: 1;
+  padding: 20px;
+  overflow-y: auto;
+  background-color: #f5f5f7;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.my-msg {
+  align-self: flex-end;
+  background-color: #00d8ff;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 15px 15px 0 15px;
+  max-width: 70%;
+}
+
+.other-msg {
+  align-self: flex-start;
+  background-color: #e5e5ea;
+  color: #333;
+  padding: 8px 12px;
+  border-radius: 15px 15px 15px 0;
+  max-width: 70%;
+}
+
+.input-bar {
+  display: flex;
+  align-items: center;
+  padding: 10px;
+  gap: 10px;
+  background-color: #fff;
+  border-top: 1px solid #ccc;
+}
+
+.input-bar input {
+  flex: 1;
+  padding: 10px 15px;
+  border-radius: 25px;
+  border: 1px solid #ccc;
+  outline: none;
+}
+
+.input-bar button {
+  background-color: #00d8ff;
+  color: white;
+  border: none;
+  padding: 8px 15px;
+  border-radius: 50%;
+  cursor: pointer;
+}
+
+.emoji-picker {
+  display: none;
+  position: absolute;
+  bottom: 60px;
+  right: 20px;
+  background: #fff;
+  padding: 10px;
+  border-radius: 10px;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+}
+
+.emoji-picker span {
+  font-size: 1.5rem;
+  cursor: pointer;
+  margin: 5px;
+}
+
+.emoji-picker.show {
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .input-bar input {
+    font-size: 0.9rem;
+  }
+}

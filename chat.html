@@ -1,28 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Konvo - Chat</title>
-  <link rel="stylesheet" href="chat.css">
-  <script type="module" src="chat.js" defer></script>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Konvo — Chat</title>
+  <link rel="stylesheet" href="chat.css"/>
 </head>
 <body>
-  <header>
-    <button id="back-btn">⬅</button>
-    <h2 id="chat-with">User</h2>
-  </header>
+  <header class="chat-top" id="chatTop"></header>
 
-  <div class="messages" id="messages"></div>
+  <main class="messages" id="messages"></main>
 
-  <div class="input-bar">
-    <input type="text" id="msg" placeholder="Type a message..." />
-    <button id="emoji-btn">😊</button>
-    <button id="send-btn">Send</button>
-  </div>
+  <footer class="composer">
+    <input id="msgInput" placeholder="Type a message..."/>
+    <button id="sendBtn">Send</button>
+  </footer>
 
-  <div class="emoji-picker" id="emoji-picker">
-    <span>😀</span><span>😂</span><span>😍</span><span>😎</span><span>👍</span>
-  </div>
+  <script type="module" src="firebase.js"></script>
+  <script type="module" src="chat.js"></script>
 </body>
 </html>

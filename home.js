@@ -1,35 +1,80 @@
+// home.js
 import { auth, db } from "./firebase.js";
-import { collection, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import {
+  collection, query, orderBy, startAt, endAt, getDocs
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-const logoutBtn = document.getElementById("logout-btn");
-const userList = document.getElementById("user-list");
-const searchInput = document.getElementById("search-user");
+const meDiv = document.getElementById("me");
+const resultsDiv = document.getElementById("results");
+const searchInput = document.getElementById("search");
+const searchBtn = document.getElementById("searchBtn");
+const logoutBtn = document.getElementById("logoutBtn");
 
-logoutBtn.addEventListener("click", () => {
-  localStorage.clear();
-  window.location = "index.html";
+let currentUser = null;
+
+onAuthStateChanged(auth, (user) => {
+  if (!user) {
+    window.location.href = "index.html";
+    return;
+  }
+  currentUser = user;
+  const local = JSON.parse(localStorage.getItem("konvoUser") || "{}");
+  meDiv.innerHTML = `
+    <img src="${user.photoURL}" alt="me"/>
+    <div class="name">${local.username || user.displayName || "(no username)"}</div>
+    <div class="email" style="opacity:.7; font-size:.9rem">${user.email}</div>
+  `;
 });
 
-async function loadUsers() {
-  const querySnapshot = await getDocs(collection(db, "users"));
-  userList.innerHTML = "";
-  querySnapshot.forEach(doc => {
-    const user = doc.data();
-    const li = document.createElement("li");
-    li.textContent = user.displayName || user.email;
-    li.addEventListener("click", () => {
-      localStorage.setItem("chatPartner", user.email);
-      window.location = "chat.html";
+logoutBtn.addEventListener("click", async () => {
+  await signOut(auth);
+  localStorage.removeItem("konvoUser");
+  window.location.href = "index.html";
+});
+
+async function runSearch() {
+  resultsDiv.innerHTML = "Searching...";
+  const term = (searchInput.value || "").trim().toLowerCase();
+  if (!term) { resultsDiv.innerHTML = "Type a username or email to search."; return; }
+
+  // Username prefix search
+  const usersRef = collection(db, "users");
+
+  const q1 = query(usersRef, orderBy("usernameLower"), startAt(term), endAt(term + "\uf8ff"));
+  const q2 = query(usersRef, orderBy("emailLower"), startAt(term), endAt(term + "\uf8ff"));
+
+  const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
+
+  // merge results by uid
+  const map = new Map();
+  for (const s of [snap1, snap2]) {
+    s.forEach(docSnap => {
+      const d = docSnap.data();
+      if (d.uid !== currentUser.uid) map.set(d.uid, d);
     });
-    userList.appendChild(li);
+  }
+
+  if (map.size === 0) { resultsDiv.innerHTML = "No users found."; return; }
+
+  resultsDiv.innerHTML = "";
+  map.forEach((u) => {
+    const item = document.createElement("div");
+    item.className = "result";
+    item.innerHTML = `
+      <img src="${u.photoURL}" alt="">
+      <div>
+        <div style="font-weight:700">${u.username || "(no username)"}</div>
+        <div style="opacity:.7; font-size:.9rem">${u.email}</div>
+      </div>
+    `;
+    item.addEventListener("click", () => {
+      // go to private chat with this user
+      window.location.href = `chat.html?uid=${encodeURIComponent(u.uid)}`;
+    });
+    resultsDiv.appendChild(item);
   });
 }
-loadUsers();
 
-searchInput.addEventListener("input", () => {
-  const filter = searchInput.value.toLowerCase();
-  const lis = userList.querySelectorAll("li");
-  lis.forEach(li => {
-    li.style.display = li.textContent.toLowerCase().includes(filter) ? "block" : "none";
-  });
-});
+searchBtn.addEventListener("click", runSearch);
+searchInput.addEventListener("keydown", (e) => { if (e.key === "Enter") runSearch(); });

@@ -1,4 +1,3 @@
-// home.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -38,7 +37,6 @@ async function runSearch() {
   const term = (searchInput.value || "").trim().toLowerCase();
   if (!term) { resultsDiv.innerHTML = "Type a username or email to search."; return; }
 
-  // Username prefix search
   const usersRef = collection(db, "users");
 
   const q1 = query(usersRef, orderBy("usernameLower"), startAt(term), endAt(term + "\uf8ff"));
@@ -46,7 +44,6 @@ async function runSearch() {
 
   const [snap1, snap2] = await Promise.all([getDocs(q1), getDocs(q2)]);
 
-  // merge results by uid
   const map = new Map();
   for (const s of [snap1, snap2]) {
     s.forEach(docSnap => {
@@ -69,7 +66,6 @@ async function runSearch() {
       </div>
     `;
     item.addEventListener("click", () => {
-      // go to private chat with this user
       window.location.href = `chat.html?uid=${encodeURIComponent(u.uid)}`;
     });
     resultsDiv.appendChild(item);

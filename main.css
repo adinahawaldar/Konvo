@@ -17,7 +17,6 @@
             padding: 0 20px;
         }
         
-        /* Header */
         header {
             background: linear-gradient(135deg, #6e8efb, #a777e3);
             color: white;
@@ -84,7 +83,6 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
         }
         
-        /* Hero Section */
         .hero {
             padding: 100px 0;
             text-align: center;
@@ -112,7 +110,6 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
         }
         
-        /* Features Section */
         .features {
             padding: 100px 0;
             background-color: white;
@@ -174,7 +171,6 @@
             color: #444;
         }
         
-        /* How to Use */
         .how-to-use {
             padding: 100px 0;
             background: #f5f8ff;
@@ -211,7 +207,6 @@
             margin: 0 auto 20px;
         }
         
-        /* Security */
         .security {
             padding: 100px 0;
             background: white;
@@ -240,7 +235,6 @@
             border-radius: 10px;
         }
         
-        /* Additional Features */
         .additional-features {
             padding: 100px 0;
             background: #f5f8ff;
@@ -268,7 +262,6 @@
             margin-top: 5px;
         }
         
-        /* CTA */
         .cta {
             padding: 80px 0;
             text-align: center;

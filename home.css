@@ -1,5 +1,4 @@
-/* home.css */
-/* Reset and base styles */
+
 * {
     margin: 0;
     padding: 0;
@@ -15,7 +14,6 @@ body {
     flex-direction: column;
 }
 
-/* Sidebar styles */
 .sidebar {
     background: linear-gradient(135deg, #6e8efb, #a777e3);
     color: white;
@@ -57,7 +55,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Main content styles */
 .main {
     flex: 1;
     display: flex;
@@ -113,7 +110,6 @@ body {
     transform: translateY(-2px);
 }
 
-/* Results section */
 .results {
     padding: 20px;
     flex: 1;
@@ -121,7 +117,6 @@ body {
     gap: 20px;
 }
 
-/* Responsive design */
 @media (min-width: 768px) {
     body {
         flex-direction: row;

@@ -1,4 +1,3 @@
-// chat.js
 import { auth, db } from "./firebase.js";
 import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 import {
@@ -24,10 +23,8 @@ const input = document.getElementById("msgInput");
 const sendBtn = document.getElementById("sendBtn");
 const emojiBtn = document.getElementById("emojiBtn");
 
-// ✅ deterministic chatId for 1-to-1 chat
 const makeChatId = (a, b) => [a, b].sort().join("_");
 
-// 🔐 auth gate
 onAuthStateChanged(auth, async (user) => {
   if (!user) {
     location.href = "index.html";
@@ -35,7 +32,6 @@ onAuthStateChanged(auth, async (user) => {
   }
   me = user;
 
-  // fetch the other user's profile
   const otherSnap = await getDoc(doc(db, "users", otherUid));
   if (!otherSnap.exists()) {
     alert("User not found or not registered.");
@@ -44,10 +40,8 @@ onAuthStateChanged(auth, async (user) => {
   }
   other = otherSnap.data();
 
-  // compute chatId
   chatId = makeChatId(me.uid, otherUid);
 
-  // check if chat exists, else create
   const chatRef = doc(db, "conversations", chatId);
   const chatSnap = await getDoc(chatRef);
 
@@ -60,14 +54,12 @@ onAuthStateChanged(auth, async (user) => {
       return;
     }
   } else {
-    // ✅ create new chat (with both participants)
     await setDoc(chatRef, {
       participants: [me.uid, otherUid],
       updatedAt: serverTimestamp()
     });
   }
 
-  // header UI
   chatTop.innerHTML = `
     <img src="${other.photoURL || ""}" alt="">
     <div>
@@ -76,7 +68,6 @@ onAuthStateChanged(auth, async (user) => {
     </div>
   `;
 
-  // 📩 send message
   async function sendMessage() {
     const text = input.value.trim();
     if (!text || !me || !chatId) return;
@@ -86,11 +77,10 @@ onAuthStateChanged(auth, async (user) => {
       senderId: me.uid,
       senderName: me.displayName || "",
       senderPhoto: me.photoURL || "",
-      status: "sent", // ✅ added for read receipt
+      status: "sent",
       createdAt: serverTimestamp()
     });
 
-    // ✅ update chat timestamp
     await updateDoc(doc(db, "conversations", chatId), {
       updatedAt: serverTimestamp()
     });
@@ -98,7 +88,6 @@ onAuthStateChanged(auth, async (user) => {
     input.value = "";
   }
 
-  // send button + enter key
   sendBtn.addEventListener("click", sendMessage);
   input.addEventListener("keydown", (e) => {
     if (e.key === "Enter") sendMessage();
@@ -134,7 +123,6 @@ document.addEventListener("click", (e) => {
 });
 
 
-  // live messages listener with read receipts
   const msgsRef = collection(db, "conversations", chatId, "messages");
   const q = query(msgsRef, orderBy("createdAt"));
   onSnapshot(q, async (snap) => {
@@ -146,7 +134,6 @@ document.addEventListener("click", (e) => {
       div.className = "bubble " + (d.senderId === me.uid ? "mine" : "theirs");
       div.textContent = d.text;
 
-      // ✅ show read receipt for messages sent by me
       if (d.senderId === me.uid && d.status === "read") {
         const tick = document.createElement("span");
         tick.textContent = "✔✔";
@@ -160,7 +147,6 @@ document.addEventListener("click", (e) => {
 
     messagesEl.scrollTop = messagesEl.scrollHeight;
 
-    // mark messages as read if I am the recipient
     snap.docs.forEach(async (m) => {
       const d = m.data();
       if (d.senderId !== me.uid && d.status !== "read") {
@@ -168,4 +154,4 @@ document.addEventListener("click", (e) => {
       }
     });
   });
-}); // 🔥 end of auth listener
+}); 

@@ -1,12 +1,186 @@
-:root { --bg:#0b1220; --panel:#0f172a; --ink:#e5e7eb; --muted:#94a3b8; }
-* { box-sizing:border-box; }
-body { margin:0; background:var(--bg); color:var(--ink); display:flex; flex-direction:column; height:100vh; }
-.chat-top { padding:12px 16px; border-bottom:1px solid #1f2937; background:var(--panel); display:flex; align-items:center; gap:10px; }
-.chat-top img { width:36px; height:36px; border-radius:50%; }
-.messages { flex:1; overflow:auto; padding:16px; display:flex; flex-direction:column; gap:10px; }
-.bubble { max-width:70%; padding:10px 12px; border-radius:14px; line-height:1.35; }
-.mine { align-self:flex-end; background:#2563eb; color:white; border-bottom-right-radius:4px; }
-.theirs { align-self:flex-start; background:#1f2937; color:var(--ink); border-bottom-left-radius:4px; }
-.composer { display:flex; gap:10px; padding:12px; border-top:1px solid #1f2937; background:var(--panel); }
-.composer input { flex:1; padding:12px; border-radius:10px; border:1px solid #334155; background:#0b1220; color:var(--ink); }
-.composer button { padding:10px 14px; border:none; border-radius:10px; background:#22c55e; color:#021; font-weight:700; cursor:pointer; }
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+body {
+    background-color: #f5f8ff;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    color: #333;
+}
+
+#chatTop {
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    padding: 15px 20px;
+    display: flex;
+    align-items: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    min-height: 70px;
+}
+
+.chat-header-info {
+    display: flex;
+    align-items: center;
+}
+
+.chat-partner-avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    margin-right: 15px;
+    background-size: cover;
+    background-position: center;
+}
+
+.chat-partner-name {
+    font-weight: 600;
+    font-size: 18px;
+}
+
+#messages {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.message {
+    max-width: 70%;
+    padding: 12px 16px;
+    border-radius: 18px;
+    margin-bottom: 5px;
+    position: relative;
+    word-wrap: break-word;
+}
+
+.message.sent {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #6e8efb, #a777e3);
+    color: white;
+    border-bottom-right-radius: 5px;
+}
+
+.message.received {
+    align-self: flex-start;
+    background: white;
+    color: #333;
+    border-bottom-left-radius: 5px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.message-time {
+    font-size: 11px;
+    margin-top: 5px;
+    opacity: 0.8;
+    text-align: right;
+}
+
+.message.received .message-time {
+    text-align: left;
+}
+
+.composer {
+    background: white;
+    padding: 15px 20px;
+    display: flex;
+    gap: 15px;
+    box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+}
+
+#msgInput {
+    flex: 1;
+    padding: 12px 18px;
+    border: 2px solid #e0e0e0;
+    border-radius: 24px;
+    font-size: 16px;
+    outline: none;
+    transition: all 0.3s ease;
+}
+
+#msgInput:focus {
+    border-color: #6e8efb;
+    box-shadow: 0 0 0 3px rgba(110, 142, 251, 0.2);
+}
+
+#sendBtn {
+    background: #6e8efb;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 24px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    min-width: 80px;
+}
+
+#sendBtn:hover {
+    background: #5d7cea;
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(110, 142, 251, 0.3);
+}
+
+#sendBtn:active {
+    transform: translateY(0);
+}
+
+@media (max-width: 600px) {
+    #chatTop {
+        padding: 12px 15px;
+    }
+    
+    .chat-partner-avatar {
+        width: 35px;
+        height: 35px;
+        margin-right: 12px;
+    }
+    
+    .chat-partner-name {
+        font-size: 16px;
+    }
+    
+    #messages {
+        padding: 15px;
+    }
+    
+    .message {
+        max-width: 85%;
+    }
+    
+    .composer {
+        padding: 12px 15px;
+    }
+    
+    #sendBtn {
+        padding: 12px 18px;
+        min-width: 70px;
+    }
+}
+
+#messages::-webkit-scrollbar {
+    width: 8px;
+}
+
+#messages::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 4px;
+}
+
+#messages::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
+}
+
